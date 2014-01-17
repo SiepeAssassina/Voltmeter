@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <math.h>
+#include <LiquidCrystal.h>
 /*----------------------------------------------------------------\
 // Display code works as follows:                                 |
 //                                                                |
@@ -19,9 +20,9 @@ int i;
 int x;
 int tensione; //valore dela tensione
 
-int SEG[8]={2,3,4,5,6,7,8,9}; //array colonne
-int Vp[4]={A3,A2,A1,A0}; //Tensione per ogni quadrante
-
+int SEG[8]={2, 3, 4, 5, 6, 7, 8, 9}; //array colonne
+int Vp[4]={A3, A2, A1, A0}; //Tensione per ogni quadrante
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 boolean NMatrix[10][8] = {
   {1, 1, 1, 1, 1, 1, 0, 0},  //0
   {0, 1, 1, 0, 0, 0, 0, 0},  //1
@@ -36,6 +37,7 @@ boolean NMatrix[10][8] = {
   
 void setup() 
 {
+  lcd.begin(16, 2);
   pinMode (9,OUTPUT); //puntino
   for(x = 0;x <= 7; x++)
   {
@@ -51,21 +53,26 @@ void setup()
 
 void loop() 
 {
-  for(i = 0; i < 10; i++) //ciclo da 20
-  {
-    int sensorValue = analogRead(A5);   //prendo il valore da A5
-    float volt = sensorValue * (5.0 / 1023.0);   //metto in scala 0-5V
-    campioni = campioni + (volt * 100);   //converto da float x.xx in xxx e raccolgo 20 campioni
+  for(i = 0; i < 10; i++)                 //ciclo da 20
+  {      
+    campioni += (analogRead(A5) * (5.0 / 1023.0)) * 100;   //converto da float x.xx in xxx e raccolgo 20 campioni
   }                                       //Serve ad evitare eccessive oscillazioni di tensione
   tensione = campioni / 10;               //media dei valori
   campioni = 0;                           //rimetto i campioni a 0 per ripetere il tutto
   update();                               //funzione per portare in uscita il valore di temp.
 }
 
-void update()  
+void update()
+{
+  delay(10);
+  lcd.clear();
+  lcd.print(tensione);  
+}
+
+/*void update()  
 {  
-  byte voltageFigures[3] = {};   
-  for(int i = 0; i < 6; i++)
+  byte voltageFigures[3] = {tensione / 100, };   
+  for(int i = 0; i < 4; i++)
   {
     digitalWrite (Vp[i], HIGH);     
     for(int j = 0; j < 8; j++)
@@ -80,4 +87,4 @@ void update()
   }
 }
 
-
+*/

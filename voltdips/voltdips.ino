@@ -1,6 +1,19 @@
 #include <cstdlib>
 #include <math.h>
-
+/*----------------------------------------------------------------\
+// Display code works as follows:                                 |
+//                                                                |
+//                                                                |
+//              2                                                 |
+//           #######                                              |
+//        7  #     #  3                                           |  
+//           #  8  #                                              |
+//           #######                                              |
+//           #     #                                              |
+//        6  #     #  4                                           | 
+//           ####### # <- 9                                       |
+//              5                                                 |   
+\----------------------------------------------------------------*/
 int campioni=0; //campioni di tensione
 int i;
 int x;
@@ -24,29 +37,29 @@ boolean NMatrix[10][8] = {
 void setup() 
 {
   pinMode (9,OUTPUT); //puntino
-  for (x=0;x<=7;x++)
+  for(x = 0;x <= 7; x++)
   {
-    pinMode (SEG[x], OUTPUT);  //abilito pin segmenti
-    digitalWrite (SEG[x],HIGH); //livello iniziale segmenti 1
+    pinMode (SEG[x], OUTPUT);                //abilito pin segmenti
+    digitalWrite (SEG[x],HIGH);              //livello iniziale segmenti 1
   }
-  for (x=0;x<=4;x++)
+  for(x = 0; x <= 4; x++)
   {
-    pinMode (Vp[x], OUTPUT); //abilito pin alimentazioni
-    digitalWrite (Vp[x], LOW); //livello iniziale 0
+    pinMode (Vp[x], OUTPUT);                 //abilito pin alimentazioni
+    digitalWrite (Vp[x], LOW);               //livello iniziale 0
   }
 }
 
 void loop() 
 {
-  for (i=0;i<10;i++) //ciclo da 20
+  for(i = 0; i < 10; i++) //ciclo da 20
   {
-  int sensorValue = analogRead(A5); //prendo il valore da A5
-  float volt = sensorValue * (5.0 / 1023.0); //metto in scala 0-5V
-  campioni = campioni + (volt * 100); //converto da float x.xx in xxx e raccolgo 20 campioni
-  }//Serve ad evitare eccessive oscillazioni di tensione
-  tensione = campioni / 10; //media dei valori
-  campioni = 0; //rimetto i campioni a 0 per ripetere il tutto
-  update(); //funzione per portare in uscita il valore di temp.
+    int sensorValue = analogRead(A5);   //prendo il valore da A5
+    float volt = sensorValue * (5.0 / 1023.0);   //metto in scala 0-5V
+    campioni = campioni + (volt * 100);   //converto da float x.xx in xxx e raccolgo 20 campioni
+  }                                       //Serve ad evitare eccessive oscillazioni di tensione
+  tensione = campioni / 10;               //media dei valori
+  campioni = 0;                           //rimetto i campioni a 0 per ripetere il tutto
+  update();                               //funzione per portare in uscita il valore di temp.
 }
 
 void update()  
@@ -57,7 +70,7 @@ void update()
     digitalWrite (Vp[i], HIGH);     
     for(int j = 0; j < 8; j++)
     {
-      if(NMatrix[timeFigures[i]][j])      
+      if(NMatrix[voltageFigures[i]][j])      
         digitalWrite(SEG[j], LOW);           
       else
         digitalWrite(SEG[j], HIGH);

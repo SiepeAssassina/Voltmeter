@@ -42,11 +42,29 @@ void loop()
   {
   int sensorValue = analogRead(A5); //prendo il valore da A5
   float volt = sensorValue * (5.0 / 1023.0); //metto in scala 0-5V
-  campioni=campioni+(volt*100); //converto da float x.xx in xxx e raccolgo 20 campioni
+  campioni = campioni + (volt * 100); //converto da float x.xx in xxx e raccolgo 20 campioni
   }//Serve ad evitare eccessive oscillazioni di tensione
-  tensione=campioni/10; //media dei valori
-  campioni=0; //rimetto i campioni a 0 per ripetere il tutto
-  USCITA (); //funzione per portare in uscita il valore di temp.
+  tensione = campioni / 10; //media dei valori
+  campioni = 0; //rimetto i campioni a 0 per ripetere il tutto
+  update(); //funzione per portare in uscita il valore di temp.
+}
+
+void update()  
+{  
+  byte voltageFigures[3] = {};   
+  for(int i = 0; i < 6; i++)
+  {
+    digitalWrite (Vp[i], HIGH);     
+    for(int j = 0; j < 8; j++)
+    {
+      if(NMatrix[timeFigures[i]][j])      
+        digitalWrite(SEG[j], LOW);           
+      else
+        digitalWrite(SEG[j], HIGH);
+        delay(1);
+        digitalWrite (Vp[i], LOW);
+    }     
+  }
 }
 
 

@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <math.h>
 #include <LiquidCrystal.h>
+#define _RESOLUTION 1000
 /*----------------------------------------------------------------\
 // Display code works as follows:                                 |
 //                                                                |
@@ -15,7 +16,7 @@
 //           ####### # <- 9                                       |
 //              5                                                 |   
 \----------------------------------------------------------------*/
-int campioni=0; //campioni di tensione
+float campioni = 0; //campioni di tensione
 int i;
 int x;
 int tensione; //valore dela tensione
@@ -53,11 +54,11 @@ void setup()
 
 void loop() 
 {
-  for(i = 0; i < 10; i++)                 //ciclo da 20
+  for(i = 0; i < _RESOLUTION; i++)                 //ciclo da 20
   {      
-    campioni += (analogRead(A5) * (5.0 / 1023.0)) * 100;   //converto da float x.xx in xxx e raccolgo 20 campioni
+    campioni += (float)(analogRead(A5) * (float)(5.0 / 1.023));   //converto da float x.xx in xxx e raccolgo 20 campioni
   }                                       //Serve ad evitare eccessive oscillazioni di tensione
-  tensione = campioni / 10;               //media dei valori
+  tensione = (float)(campioni / _RESOLUTION);               //media dei valori
   campioni = 0;                           //rimetto i campioni a 0 per ripetere il tutto
   update();                               //funzione per portare in uscita il valore di temp.
 }

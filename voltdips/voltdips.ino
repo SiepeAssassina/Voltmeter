@@ -69,7 +69,7 @@ void update()
         digitalWrite(SEG[j], LOW);           
       else
         digitalWrite(SEG[j], HIGH);
-      if(i == 4)
+      if(i == 1)
       {
         digitalWrite(SEG[7], LOW);
       }  

@@ -17,8 +17,6 @@
 //              5                                                 |   
 \----------------------------------------------------------------*/
 float campioni = 0; //campioni di tensione
-int i;
-int x;
 int tensione; //valore dela tensione
 
 int SEG[8]={2, 3, 4, 5, 6, 7, 8, 9}; //array colonne
@@ -40,34 +38,36 @@ void setup()
 {
   lcd.begin(16, 2);
   pinMode (9,OUTPUT); //puntino
-  for(x = 0;x <= 7; x++)
+  for(int i = 0; i <= 7; i++)
   {
-    pinMode (SEG[x], OUTPUT);                //abilito pin segmenti
-    digitalWrite (SEG[x],HIGH);              //livello iniziale segmenti 1
+    pinMode (SEG[i], OUTPUT);                //abilito pin segmenti
+    digitalWrite (SEG[i],HIGH);              //livello iniziale segmenti 1
   }
-  for(x = 0; x <= 4; x++)
+  for(int i = 0; i <= 4; i++)
   {
-    pinMode (Vp[x], OUTPUT);                 //abilito pin alimentazioni
-    digitalWrite (Vp[x], LOW);               //livello iniziale 0
+    pinMode (Vp[i], OUTPUT);                 //abilito pin alimentazioni
+    digitalWrite (Vp[i], LOW);               //livello iniziale 0
   }
 }
 
 void loop() 
 {
-  for(i = 0; i < _RESOLUTION; i++)                 //ciclo da 20
+  for(int i = 0; i < _RESOLUTION; i++)                 //ciclo da 20
   {      
-    campioni += (float)(analogRead(A5) * (float)(5.0 / 1.023));   //converto da float x.xx in xxx e raccolgo 20 campioni
-  }                                       //Serve ad evitare eccessive oscillazioni di tensione
-  tensione = (float)(campioni / _RESOLUTION);               //media dei valori
-  campioni = 0;                           //rimetto i campioni a 0 per ripetere il tutto
-  update();                               //funzione per portare in uscita il valore di temp.
+    campioni += (float)(analogRead(A5) * (float)(5.0 / 1.023));  
+  }                                      
+  tensione = (float)(campioni / _RESOLUTION);               
+  campioni = 0;                         
+  update();                              
 }
 
 void update()
 {
   delay(10);
   lcd.clear();
-  lcd.print(tensione);  
+  lcd.print(tensione / _RESOLUTION);  
+  lcd.write('.');
+  lcd.print(tensione % _RESOLUTION);
 }
 
 /*void update()  
